@@ -1,0 +1,24 @@
+src/kernels.c:8:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:8:24: optimized: loop vectorized using 8 byte vectors
+src/kernels.c:13:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:18:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:18:24: optimized: loop vectorized using 8 byte vectors
+src/kernels.c:22:28: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:22:28: optimized: loop vectorized using 8 byte vectors
+src/kernels.c:26:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:26:24: optimized: loop vectorized using 8 byte vectors
+src/kernels.c:26:24: missed: couldn't vectorize loop
+src/kernels.c:26:24: missed: Loop costings may not be worthwhile.
+src/kernels.c:30:24: missed: couldn't vectorize loop
+src/kernels.c:30:46: missed: not vectorized: not suitable for gather load _7 = *_6;
+src/kernels.c:34:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:39:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:44:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:48:28: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:52:24: optimized: loop vectorized using 16 byte vectors
+src/kernels.c:52:24: missed: couldn't vectorize loop
+src/kernels.c:52:50: missed: not vectorized: no vectype for stmt: _4 = *_3;
+ scalar_type: const double
+src/kernels.c:56:24: missed: couldn't vectorize loop
+src/kernels.c:56:46: missed: not vectorized: no vectype for stmt: _7 = *_6;
+ scalar_type: const double

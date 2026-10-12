@@ -1,0 +1,678 @@
+
+bin/kernels_native_fm.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <saxpy_f32>:
+   0:	endbr64 
+   4:	mov    %rsi,%rcx
+   7:	test   %rdi,%rdi
+   a:	je     eb <saxpy_f32+0xeb>
+  10:	lea    -0x1(%rdi),%rax
+  14:	cmp    $0x6,%rax
+  18:	jbe    f4 <saxpy_f32+0xf4>
+  1e:	mov    %rdi,%rsi
+  21:	vbroadcastss %xmm0,%ymm2
+  26:	xor    %eax,%eax
+  28:	shr    $0x3,%rsi
+  2c:	shl    $0x5,%rsi
+  30:	vmovups (%rcx,%rax,1),%ymm1
+  35:	vfmadd213ps (%rdx,%rax,1),%ymm2,%ymm1
+  3b:	vmovups %ymm1,(%rdx,%rax,1)
+  40:	add    $0x20,%rax
+  44:	cmp    %rsi,%rax
+  47:	jne    30 <saxpy_f32+0x30>
+  49:	mov    %rdi,%rax
+  4c:	and    $0xfffffffffffffff8,%rax
+  50:	test   $0x7,%dil
+  54:	je     f0 <saxpy_f32+0xf0>
+  5a:	vzeroupper 
+  5d:	mov    %rdi,%rsi
+  60:	sub    %rax,%rsi
+  63:	lea    -0x1(%rsi),%r8
+  67:	cmp    $0x2,%r8
+  6b:	jbe    95 <saxpy_f32+0x95>
+  6d:	lea    (%rdx,%rax,4),%r8
+  71:	vshufps $0x0,%xmm0,%xmm0,%xmm1
+  76:	vmovups (%r8),%xmm3
+  7b:	vfmadd132ps (%rcx,%rax,4),%xmm3,%xmm1
+  81:	vmovups %xmm1,(%r8)
+  86:	mov    %rsi,%r8
+  89:	and    $0xfffffffffffffffc,%r8
+  8d:	add    %r8,%rax
+  90:	cmp    %r8,%rsi
+  93:	je     eb <saxpy_f32+0xeb>
+  95:	lea    0x0(,%rax,4),%rsi
+  9d:	vmovss (%rcx,%rax,4),%xmm1
+  a2:	lea    (%rdx,%rsi,1),%r8
+  a6:	vfmadd213ss (%r8),%xmm0,%xmm1
+  ab:	vmovss %xmm1,(%r8)
+  b0:	lea    0x1(%rax),%r8
+  b4:	cmp    %r8,%rdi
+  b7:	jbe    eb <saxpy_f32+0xeb>
+  b9:	lea    0x4(%rdx,%rsi,1),%r8
+  be:	vmovss 0x4(%rcx,%rsi,1),%xmm1
+  c4:	add    $0x2,%rax
+  c8:	vfmadd213ss (%r8),%xmm0,%xmm1
+  cd:	vmovss %xmm1,(%r8)
+  d2:	cmp    %rax,%rdi
+  d5:	jbe    eb <saxpy_f32+0xeb>
+  d7:	lea    0x8(%rdx,%rsi,1),%rax
+  dc:	vmovss (%rax),%xmm4
+  e0:	vfmadd132ss 0x8(%rcx,%rsi,1),%xmm4,%xmm0
+  e7:	vmovss %xmm0,(%rax)
+  eb:	ret    
+  ec:	nopl   0x0(%rax)
+  f0:	vzeroupper 
+  f3:	ret    
+  f4:	xor    %eax,%eax
+  f6:	jmp    5d <saxpy_f32+0x5d>
+  fb:	nopl   0x0(%rax,%rax,1)
+
+0000000000000100 <dot_f32>:
+ 100:	endbr64 
+ 104:	mov    %rsi,%rcx
+ 107:	test   %rdi,%rdi
+ 10a:	je     1f8 <dot_f32+0xf8>
+ 110:	lea    -0x1(%rdi),%rax
+ 114:	cmp    $0x6,%rax
+ 118:	jbe    204 <dot_f32+0x104>
+ 11e:	mov    %rdi,%rsi
+ 121:	xor    %eax,%eax
+ 123:	vxorps %xmm0,%xmm0,%xmm0
+ 127:	shr    $0x3,%rsi
+ 12b:	shl    $0x5,%rsi
+ 12f:	nop
+ 130:	vmovups (%rcx,%rax,1),%ymm3
+ 135:	vfmadd231ps (%rdx,%rax,1),%ymm3,%ymm0
+ 13b:	add    $0x20,%rax
+ 13f:	cmp    %rsi,%rax
+ 142:	jne    130 <dot_f32+0x30>
+ 144:	vextractf128 $0x1,%ymm0,%xmm1
+ 14a:	mov    %rdi,%rax
+ 14d:	vaddps %xmm0,%xmm1,%xmm0
+ 151:	and    $0xfffffffffffffff8,%rax
+ 155:	vmovhlps %xmm0,%xmm0,%xmm1
+ 159:	vaddps %xmm0,%xmm1,%xmm1
+ 15d:	vshufps $0x55,%xmm1,%xmm1,%xmm0
+ 162:	vaddps %xmm1,%xmm0,%xmm0
+ 166:	test   $0x7,%dil
+ 16a:	je     200 <dot_f32+0x100>
+ 170:	vzeroupper 
+ 173:	mov    %rdi,%rsi
+ 176:	sub    %rax,%rsi
+ 179:	lea    -0x1(%rsi),%r8
+ 17d:	cmp    $0x2,%r8
+ 181:	jbe    1b1 <dot_f32+0xb1>
+ 183:	vmovups (%rcx,%rax,4),%xmm4
+ 188:	vmulps (%rdx,%rax,4),%xmm4,%xmm1
+ 18d:	mov    %rsi,%r8
+ 190:	and    $0xfffffffffffffffc,%r8
+ 194:	add    %r8,%rax
+ 197:	vmovhlps %xmm1,%xmm1,%xmm2
+ 19b:	vaddps %xmm1,%xmm2,%xmm2
+ 19f:	vshufps $0x55,%xmm2,%xmm2,%xmm1
+ 1a4:	vaddps %xmm2,%xmm1,%xmm1
+ 1a8:	vaddss %xmm1,%xmm0,%xmm0
+ 1ac:	cmp    %r8,%rsi
+ 1af:	je     1fc <dot_f32+0xfc>
+ 1b1:	lea    0x1(%rax),%r8
+ 1b5:	vmovss (%rcx,%rax,4),%xmm5
+ 1ba:	lea    0x0(,%rax,4),%rsi
+ 1c2:	vfmadd231ss (%rdx,%rax,4),%xmm5,%xmm0
+ 1c8:	cmp    %r8,%rdi
+ 1cb:	jbe    1fc <dot_f32+0xfc>
+ 1cd:	add    $0x2,%rax
+ 1d1:	vmovss 0x4(%rdx,%rsi,1),%xmm6
+ 1d7:	vfmadd231ss 0x4(%rcx,%rsi,1),%xmm6,%xmm0
+ 1de:	cmp    %rax,%rdi
+ 1e1:	jbe    1fc <dot_f32+0xfc>
+ 1e3:	vmovss 0x8(%rcx,%rsi,1),%xmm7
+ 1e9:	vfmadd231ss 0x8(%rdx,%rsi,1),%xmm7,%xmm0
+ 1f0:	ret    
+ 1f1:	nopl   0x0(%rax)
+ 1f8:	vxorps %xmm0,%xmm0,%xmm0
+ 1fc:	ret    
+ 1fd:	nopl   (%rax)
+ 200:	vzeroupper 
+ 203:	ret    
+ 204:	xor    %eax,%eax
+ 206:	vxorps %xmm0,%xmm0,%xmm0
+ 20a:	jmp    173 <dot_f32+0x73>
+ 20f:	nop
+
+0000000000000210 <mul_f32>:
+ 210:	endbr64 
+ 214:	mov    %rdi,%r8
+ 217:	mov    %rsi,%rdi
+ 21a:	mov    %rdx,%rsi
+ 21d:	mov    %rcx,%rdx
+ 220:	test   %r8,%r8
+ 223:	je     2ef <mul_f32+0xdf>
+ 229:	lea    -0x1(%r8),%rax
+ 22d:	cmp    $0x6,%rax
+ 231:	jbe    2f4 <mul_f32+0xe4>
+ 237:	mov    %r8,%rcx
+ 23a:	xor    %eax,%eax
+ 23c:	shr    $0x3,%rcx
+ 240:	shl    $0x5,%rcx
+ 244:	nopl   0x0(%rax)
+ 248:	vmovups (%rdi,%rax,1),%ymm1
+ 24d:	vmulps (%rsi,%rax,1),%ymm1,%ymm0
+ 252:	vmovups %ymm0,(%rdx,%rax,1)
+ 257:	add    $0x20,%rax
+ 25b:	cmp    %rcx,%rax
+ 25e:	jne    248 <mul_f32+0x38>
+ 260:	mov    %r8,%rax
+ 263:	and    $0xfffffffffffffff8,%rax
+ 267:	test   $0x7,%r8b
+ 26b:	je     2f0 <mul_f32+0xe0>
+ 271:	vzeroupper 
+ 274:	mov    %r8,%rcx
+ 277:	sub    %rax,%rcx
+ 27a:	lea    -0x1(%rcx),%r9
+ 27e:	cmp    $0x2,%r9
+ 282:	jbe    2a2 <mul_f32+0x92>
+ 284:	vmovups (%rdi,%rax,4),%xmm2
+ 289:	vmulps (%rsi,%rax,4),%xmm2,%xmm0
+ 28e:	mov    %rcx,%r9
+ 291:	and    $0xfffffffffffffffc,%r9
+ 295:	vmovups %xmm0,(%rdx,%rax,4)
+ 29a:	add    %r9,%rax
+ 29d:	cmp    %r9,%rcx
+ 2a0:	je     2ef <mul_f32+0xdf>
+ 2a2:	vmovss (%rdi,%rax,4),%xmm0
+ 2a7:	vmulss (%rsi,%rax,4),%xmm0,%xmm0
+ 2ac:	lea    0x1(%rax),%r9
+ 2b0:	lea    0x0(,%rax,4),%rcx
+ 2b8:	vmovss %xmm0,(%rdx,%rax,4)
+ 2bd:	cmp    %r9,%r8
+ 2c0:	jbe    2ef <mul_f32+0xdf>
+ 2c2:	vmovss 0x4(%rsi,%rcx,1),%xmm0
+ 2c8:	vmulss 0x4(%rdi,%rcx,1),%xmm0,%xmm0
+ 2ce:	add    $0x2,%rax
+ 2d2:	vmovss %xmm0,0x4(%rdx,%rcx,1)
+ 2d8:	cmp    %rax,%r8
+ 2db:	jbe    2ef <mul_f32+0xdf>
+ 2dd:	vmovss 0x8(%rdi,%rcx,1),%xmm0
+ 2e3:	vmulss 0x8(%rsi,%rcx,1),%xmm0,%xmm0
+ 2e9:	vmovss %xmm0,0x8(%rdx,%rcx,1)
+ 2ef:	ret    
+ 2f0:	vzeroupper 
+ 2f3:	ret    
+ 2f4:	xor    %eax,%eax
+ 2f6:	jmp    274 <mul_f32+0x64>
+ 2fb:	nopl   0x0(%rax,%rax,1)
+
+0000000000000300 <stencil_f32>:
+ 300:	endbr64 
+ 304:	vmovaps %xmm0,%xmm4
+ 308:	mov    %rsi,%rcx
+ 30b:	cmp    $0x2,%rdi
+ 30f:	jbe    43a <stencil_f32+0x13a>
+ 315:	lea    -0x3(%rdi),%rax
+ 319:	lea    -0x2(%rdi),%r9
+ 31d:	cmp    $0x6,%rax
+ 321:	jbe    444 <stencil_f32+0x144>
+ 327:	mov    %r9,%rsi
+ 32a:	vbroadcastss %xmm0,%ymm6
+ 32f:	vbroadcastss %xmm1,%ymm5
+ 334:	xor    %eax,%eax
+ 336:	shr    $0x3,%rsi
+ 33a:	vbroadcastss %xmm2,%ymm3
+ 33f:	shl    $0x5,%rsi
+ 343:	nopl   0x0(%rax,%rax,1)
+ 348:	vmulps 0x4(%rcx,%rax,1),%ymm5,%ymm0
+ 34e:	vfmadd231ps (%rcx,%rax,1),%ymm6,%ymm0
+ 354:	vfmadd231ps 0x8(%rcx,%rax,1),%ymm3,%ymm0
+ 35b:	vmovups %ymm0,0x4(%rdx,%rax,1)
+ 361:	add    $0x20,%rax
+ 365:	cmp    %rsi,%rax
+ 368:	jne    348 <stencil_f32+0x48>
+ 36a:	mov    %r9,%rax
+ 36d:	and    $0xfffffffffffffff8,%rax
+ 371:	lea    0x2(%rax),%rsi
+ 375:	lea    0x1(%rax),%r8
+ 379:	cmp    %r9,%rax
+ 37c:	je     440 <stencil_f32+0x140>
+ 382:	vzeroupper 
+ 385:	mov    %rdi,%r9
+ 388:	sub    %rax,%r9
+ 38b:	lea    -0x2(%r9),%r10
+ 38f:	sub    $0x3,%r9
+ 393:	cmp    $0x2,%r9
+ 397:	jbe    3d3 <stencil_f32+0xd3>
+ 399:	vshufps $0x0,%xmm2,%xmm2,%xmm5
+ 39e:	vmulps 0x8(%rcx,%rax,4),%xmm5,%xmm5
+ 3a4:	vshufps $0x0,%xmm1,%xmm1,%xmm3
+ 3a9:	vshufps $0x0,%xmm4,%xmm4,%xmm0
+ 3ae:	vfmadd132ps 0x4(%rcx,%rax,4),%xmm5,%xmm3
+ 3b5:	vfmadd132ps (%rcx,%rax,4),%xmm3,%xmm0
+ 3bb:	vmovups %xmm0,0x4(%rdx,%rax,4)
+ 3c1:	mov    %r10,%rax
+ 3c4:	and    $0xfffffffffffffffc,%rax
+ 3c8:	add    %rax,%rsi
+ 3cb:	add    %rax,%r8
+ 3ce:	cmp    %rax,%r10
+ 3d1:	je     43a <stencil_f32+0x13a>
+ 3d3:	vmovss (%rcx,%rsi,4),%xmm3
+ 3d8:	lea    0x0(,%rsi,4),%rax
+ 3e0:	vmulss %xmm2,%xmm3,%xmm0
+ 3e4:	vfmadd231ss (%rcx,%r8,4),%xmm1,%xmm0
+ 3ea:	vfmadd231ss -0x4(%rcx,%r8,4),%xmm4,%xmm0
+ 3f1:	vmovss %xmm0,(%rdx,%r8,4)
+ 3f7:	lea    0x1(%rsi),%r8
+ 3fb:	cmp    %r8,%rdi
+ 3fe:	jbe    43a <stencil_f32+0x13a>
+ 400:	vmovss 0x4(%rcx,%rax,1),%xmm5
+ 406:	add    $0x2,%rsi
+ 40a:	vmulss %xmm5,%xmm2,%xmm0
+ 40e:	vfmadd231ss -0x4(%rcx,%rax,1),%xmm4,%xmm0
+ 415:	vfmadd231ss %xmm1,%xmm3,%xmm0
+ 41a:	vmovss %xmm0,(%rdx,%rax,1)
+ 41f:	cmp    %rsi,%rdi
+ 422:	jbe    43a <stencil_f32+0x13a>
+ 424:	vmulss 0x8(%rcx,%rax,1),%xmm2,%xmm2
+ 42a:	vfmadd132ss %xmm4,%xmm2,%xmm3
+ 42f:	vfmadd132ss %xmm5,%xmm3,%xmm1
+ 434:	vmovss %xmm1,0x4(%rdx,%rax,1)
+ 43a:	ret    
+ 43b:	nopl   0x0(%rax,%rax,1)
+ 440:	vzeroupper 
+ 443:	ret    
+ 444:	xor    %eax,%eax
+ 446:	mov    $0x1,%r8d
+ 44c:	mov    $0x2,%esi
+ 451:	jmp    385 <stencil_f32+0x85>
+ 456:	cs nopw 0x0(%rax,%rax,1)
+
+0000000000000460 <saxpy_stride_f32>:
+ 460:	endbr64 
+ 464:	mov    %rdi,%r8
+ 467:	mov    %rdx,%rdi
+ 46a:	mov    %rcx,%rdx
+ 46d:	test   %r8,%r8
+ 470:	je     557 <saxpy_stride_f32+0xf7>
+ 476:	cmp    $0x1,%rsi
+ 47a:	jne    560 <saxpy_stride_f32+0x100>
+ 480:	lea    -0x1(%r8),%rax
+ 484:	cmp    $0x6,%rax
+ 488:	jbe    591 <saxpy_stride_f32+0x131>
+ 48e:	mov    %r8,%rcx
+ 491:	vbroadcastss %xmm0,%ymm2
+ 496:	xor    %eax,%eax
+ 498:	shr    $0x3,%rcx
+ 49c:	shl    $0x5,%rcx
+ 4a0:	vmovups (%rdi,%rax,1),%ymm1
+ 4a5:	vfmadd213ps (%rdx,%rax,1),%ymm2,%ymm1
+ 4ab:	vmovups %ymm1,(%rdx,%rax,1)
+ 4b0:	add    $0x20,%rax
+ 4b4:	cmp    %rcx,%rax
+ 4b7:	jne    4a0 <saxpy_stride_f32+0x40>
+ 4b9:	mov    %r8,%rax
+ 4bc:	and    $0xfffffffffffffff8,%rax
+ 4c0:	test   $0x7,%r8b
+ 4c4:	je     58d <saxpy_stride_f32+0x12d>
+ 4ca:	vzeroupper 
+ 4cd:	mov    %r8,%rcx
+ 4d0:	sub    %rax,%rcx
+ 4d3:	lea    -0x1(%rcx),%rsi
+ 4d7:	cmp    $0x2,%rsi
+ 4db:	jbe    503 <saxpy_stride_f32+0xa3>
+ 4dd:	lea    (%rdx,%rax,4),%rsi
+ 4e1:	vshufps $0x0,%xmm0,%xmm0,%xmm1
+ 4e6:	vmovups (%rsi),%xmm3
+ 4ea:	vfmadd132ps (%rdi,%rax,4),%xmm3,%xmm1
+ 4f0:	vmovups %xmm1,(%rsi)
+ 4f4:	mov    %rcx,%rsi
+ 4f7:	and    $0xfffffffffffffffc,%rsi
+ 4fb:	add    %rsi,%rax
+ 4fe:	cmp    %rsi,%rcx
+ 501:	je     557 <saxpy_stride_f32+0xf7>
+ 503:	lea    0x0(,%rax,4),%rcx
+ 50b:	vmovss (%rdi,%rax,4),%xmm1
+ 510:	lea    (%rdx,%rcx,1),%rsi
+ 514:	vfmadd213ss (%rsi),%xmm0,%xmm1
+ 519:	vmovss %xmm1,(%rsi)
+ 51d:	lea    0x1(%rax),%rsi
+ 521:	cmp    %rsi,%r8
+ 524:	jbe    557 <saxpy_stride_f32+0xf7>
+ 526:	lea    0x4(%rdx,%rcx,1),%rsi
+ 52b:	vmovss 0x4(%rdi,%rcx,1),%xmm1
+ 531:	add    $0x2,%rax
+ 535:	vfmadd213ss (%rsi),%xmm0,%xmm1
+ 53a:	vmovss %xmm1,(%rsi)
+ 53e:	cmp    %rax,%r8
+ 541:	jbe    557 <saxpy_stride_f32+0xf7>
+ 543:	lea    0x8(%rdx,%rcx,1),%rax
+ 548:	vmovss (%rax),%xmm4
+ 54c:	vfmadd132ss 0x8(%rdi,%rcx,1),%xmm4,%xmm0
+ 553:	vmovss %xmm0,(%rax)
+ 557:	ret    
+ 558:	nopl   0x0(%rax,%rax,1)
+ 560:	shl    $0x2,%rsi
+ 564:	xor    %eax,%eax
+ 566:	xor    %ecx,%ecx
+ 568:	nopl   0x0(%rax,%rax,1)
+ 570:	vmovss (%rdi,%rax,1),%xmm1
+ 575:	vfmadd213ss (%rdx,%rax,1),%xmm0,%xmm1
+ 57b:	add    $0x1,%rcx
+ 57f:	vmovss %xmm1,(%rdx,%rax,1)
+ 584:	add    %rsi,%rax
+ 587:	cmp    %rcx,%r8
+ 58a:	jne    570 <saxpy_stride_f32+0x110>
+ 58c:	ret    
+ 58d:	vzeroupper 
+ 590:	ret    
+ 591:	xor    %eax,%eax
+ 593:	jmp    4cd <saxpy_stride_f32+0x6d>
+ 598:	nopl   0x0(%rax,%rax,1)
+
+00000000000005a0 <saxpy_gather_f32>:
+ 5a0:	endbr64 
+ 5a4:	test   %rdi,%rdi
+ 5a7:	je     5ce <saxpy_gather_f32+0x2e>
+ 5a9:	xor    %eax,%eax
+ 5ab:	nopl   0x0(%rax,%rax,1)
+ 5b0:	movslq (%rsi,%rax,4),%r8
+ 5b4:	vmovss (%rdx,%r8,4),%xmm1
+ 5ba:	vfmadd213ss (%rcx,%rax,4),%xmm0,%xmm1
+ 5c0:	vmovss %xmm1,(%rcx,%rax,4)
+ 5c5:	add    $0x1,%rax
+ 5c9:	cmp    %rax,%rdi
+ 5cc:	jne    5b0 <saxpy_gather_f32+0x10>
+ 5ce:	ret    
+ 5cf:	nop
+
+00000000000005d0 <saxpy_f64>:
+ 5d0:	endbr64 
+ 5d4:	test   %rdi,%rdi
+ 5d7:	je     669 <saxpy_f64+0x99>
+ 5dd:	lea    -0x1(%rdi),%rax
+ 5e1:	cmp    $0x2,%rax
+ 5e5:	jbe    674 <saxpy_f64+0xa4>
+ 5eb:	mov    %rdi,%rcx
+ 5ee:	vbroadcastsd %xmm0,%ymm2
+ 5f3:	xor    %eax,%eax
+ 5f5:	shr    $0x2,%rcx
+ 5f9:	shl    $0x5,%rcx
+ 5fd:	nopl   (%rax)
+ 600:	vmovupd (%rsi,%rax,1),%ymm1
+ 605:	vfmadd213pd (%rdx,%rax,1),%ymm2,%ymm1
+ 60b:	vmovupd %ymm1,(%rdx,%rax,1)
+ 610:	add    $0x20,%rax
+ 614:	cmp    %rcx,%rax
+ 617:	jne    600 <saxpy_f64+0x30>
+ 619:	mov    %rdi,%rax
+ 61c:	and    $0xfffffffffffffffc,%rax
+ 620:	test   $0x3,%dil
+ 624:	je     670 <saxpy_f64+0xa0>
+ 626:	vzeroupper 
+ 629:	sub    %rax,%rdi
+ 62c:	cmp    $0x1,%rdi
+ 630:	je     657 <saxpy_f64+0x87>
+ 632:	lea    (%rdx,%rax,8),%rcx
+ 636:	vmovddup %xmm0,%xmm1
+ 63a:	vmovupd (%rcx),%xmm4
+ 63e:	vfmadd132pd (%rsi,%rax,8),%xmm4,%xmm1
+ 644:	vmovupd %xmm1,(%rcx)
+ 648:	mov    %rdi,%rcx
+ 64b:	and    $0xfffffffffffffffe,%rcx
+ 64f:	add    %rcx,%rax
+ 652:	cmp    %rcx,%rdi
+ 655:	je     669 <saxpy_f64+0x99>
+ 657:	lea    (%rdx,%rax,8),%rdx
+ 65b:	vmovsd (%rdx),%xmm3
+ 65f:	vfmadd132sd (%rsi,%rax,8),%xmm3,%xmm0
+ 665:	vmovsd %xmm0,(%rdx)
+ 669:	ret    
+ 66a:	nopw   0x0(%rax,%rax,1)
+ 670:	vzeroupper 
+ 673:	ret    
+ 674:	xor    %eax,%eax
+ 676:	jmp    629 <saxpy_f64+0x59>
+ 678:	nopl   0x0(%rax,%rax,1)
+
+0000000000000680 <dot_f64>:
+ 680:	endbr64 
+ 684:	test   %rdi,%rdi
+ 687:	je     720 <dot_f64+0xa0>
+ 68d:	lea    -0x1(%rdi),%rax
+ 691:	cmp    $0x2,%rax
+ 695:	jbe    72c <dot_f64+0xac>
+ 69b:	mov    %rdi,%rcx
+ 69e:	xor    %eax,%eax
+ 6a0:	vxorpd %xmm0,%xmm0,%xmm0
+ 6a4:	shr    $0x2,%rcx
+ 6a8:	shl    $0x5,%rcx
+ 6ac:	nopl   0x0(%rax)
+ 6b0:	vmovupd (%rsi,%rax,1),%ymm3
+ 6b5:	vfmadd231pd (%rdx,%rax,1),%ymm3,%ymm0
+ 6bb:	add    $0x20,%rax
+ 6bf:	cmp    %rcx,%rax
+ 6c2:	jne    6b0 <dot_f64+0x30>
+ 6c4:	vextractf128 $0x1,%ymm0,%xmm1
+ 6ca:	mov    %rdi,%rax
+ 6cd:	vaddpd %xmm0,%xmm1,%xmm1
+ 6d1:	and    $0xfffffffffffffffc,%rax
+ 6d5:	vunpckhpd %xmm1,%xmm1,%xmm0
+ 6d9:	vaddpd %xmm1,%xmm0,%xmm0
+ 6dd:	test   $0x3,%dil
+ 6e1:	je     728 <dot_f64+0xa8>
+ 6e3:	vzeroupper 
+ 6e6:	sub    %rax,%rdi
+ 6e9:	cmp    $0x1,%rdi
+ 6ed:	je     714 <dot_f64+0x94>
+ 6ef:	vmovupd (%rsi,%rax,8),%xmm5
+ 6f4:	vmulpd (%rdx,%rax,8),%xmm5,%xmm2
+ 6f9:	mov    %rdi,%rcx
+ 6fc:	and    $0xfffffffffffffffe,%rcx
+ 700:	add    %rcx,%rax
+ 703:	vunpckhpd %xmm2,%xmm2,%xmm1
+ 707:	vaddpd %xmm2,%xmm1,%xmm1
+ 70b:	vaddsd %xmm1,%xmm0,%xmm0
+ 70f:	cmp    %rcx,%rdi
+ 712:	je     724 <dot_f64+0xa4>
+ 714:	vmovsd (%rsi,%rax,8),%xmm4
+ 719:	vfmadd231sd (%rdx,%rax,8),%xmm4,%xmm0
+ 71f:	ret    
+ 720:	vxorpd %xmm0,%xmm0,%xmm0
+ 724:	ret    
+ 725:	nopl   (%rax)
+ 728:	vzeroupper 
+ 72b:	ret    
+ 72c:	xor    %eax,%eax
+ 72e:	vxorpd %xmm0,%xmm0,%xmm0
+ 732:	jmp    6e6 <dot_f64+0x66>
+ 734:	data16 cs nopw 0x0(%rax,%rax,1)
+ 73f:	nop
+
+0000000000000740 <mul_f64>:
+ 740:	endbr64 
+ 744:	test   %rdi,%rdi
+ 747:	je     7be <mul_f64+0x7e>
+ 749:	lea    -0x1(%rdi),%rax
+ 74d:	cmp    $0x2,%rax
+ 751:	jbe    7c4 <mul_f64+0x84>
+ 753:	mov    %rdi,%r8
+ 756:	xor    %eax,%eax
+ 758:	shr    $0x2,%r8
+ 75c:	shl    $0x5,%r8
+ 760:	vmovupd (%rsi,%rax,1),%ymm1
+ 765:	vmulpd (%rdx,%rax,1),%ymm1,%ymm0
+ 76a:	vmovupd %ymm0,(%rcx,%rax,1)
+ 76f:	add    $0x20,%rax
+ 773:	cmp    %r8,%rax
+ 776:	jne    760 <mul_f64+0x20>
+ 778:	mov    %rdi,%rax
+ 77b:	and    $0xfffffffffffffffc,%rax
+ 77f:	test   $0x3,%dil
+ 783:	je     7c0 <mul_f64+0x80>
+ 785:	vzeroupper 
+ 788:	sub    %rax,%rdi
+ 78b:	cmp    $0x1,%rdi
+ 78f:	je     7af <mul_f64+0x6f>
+ 791:	vmovupd (%rsi,%rax,8),%xmm2
+ 796:	vmulpd (%rdx,%rax,8),%xmm2,%xmm0
+ 79b:	mov    %rdi,%r8
+ 79e:	and    $0xfffffffffffffffe,%r8
+ 7a2:	vmovupd %xmm0,(%rcx,%rax,8)
+ 7a7:	add    %r8,%rax
+ 7aa:	cmp    %r8,%rdi
+ 7ad:	je     7be <mul_f64+0x7e>
+ 7af:	vmovsd (%rsi,%rax,8),%xmm0
+ 7b4:	vmulsd (%rdx,%rax,8),%xmm0,%xmm0
+ 7b9:	vmovsd %xmm0,(%rcx,%rax,8)
+ 7be:	ret    
+ 7bf:	nop
+ 7c0:	vzeroupper 
+ 7c3:	ret    
+ 7c4:	xor    %eax,%eax
+ 7c6:	jmp    788 <mul_f64+0x48>
+ 7c8:	nopl   0x0(%rax,%rax,1)
+
+00000000000007d0 <stencil_f64>:
+ 7d0:	endbr64 
+ 7d4:	vmovsd %xmm0,%xmm0,%xmm3
+ 7d8:	mov    %rsi,%rcx
+ 7db:	cmp    $0x2,%rdi
+ 7df:	jbe    8ad <stencil_f64+0xdd>
+ 7e5:	lea    -0x3(%rdi),%rax
+ 7e9:	lea    -0x2(%rdi),%r9
+ 7ed:	cmp    $0x2,%rax
+ 7f1:	jbe    8b4 <stencil_f64+0xe4>
+ 7f7:	mov    %r9,%rsi
+ 7fa:	vbroadcastsd %xmm0,%ymm6
+ 7ff:	vbroadcastsd %xmm1,%ymm5
+ 804:	xor    %eax,%eax
+ 806:	shr    $0x2,%rsi
+ 80a:	vbroadcastsd %xmm2,%ymm4
+ 80f:	shl    $0x5,%rsi
+ 813:	nopl   0x0(%rax,%rax,1)
+ 818:	vmulpd 0x8(%rcx,%rax,1),%ymm5,%ymm0
+ 81e:	vfmadd231pd (%rcx,%rax,1),%ymm6,%ymm0
+ 824:	vfmadd231pd 0x10(%rcx,%rax,1),%ymm4,%ymm0
+ 82b:	vmovupd %ymm0,0x8(%rdx,%rax,1)
+ 831:	add    $0x20,%rax
+ 835:	cmp    %rsi,%rax
+ 838:	jne    818 <stencil_f64+0x48>
+ 83a:	mov    %r9,%rsi
+ 83d:	and    $0xfffffffffffffffc,%rsi
+ 841:	lea    0x2(%rsi),%r8
+ 845:	lea    0x1(%rsi),%rax
+ 849:	cmp    %r9,%rsi
+ 84c:	je     8b0 <stencil_f64+0xe0>
+ 84e:	vzeroupper 
+ 851:	sub    %rsi,%rdi
+ 854:	lea    -0x2(%rdi),%r9
+ 858:	cmp    $0x3,%rdi
+ 85c:	je     895 <stencil_f64+0xc5>
+ 85e:	vmovddup %xmm2,%xmm5
+ 862:	vmovddup %xmm1,%xmm4
+ 866:	vmovddup %xmm3,%xmm0
+ 86a:	vmulpd 0x10(%rcx,%rsi,8),%xmm5,%xmm5
+ 870:	vfmadd132pd 0x8(%rcx,%rsi,8),%xmm5,%xmm4
+ 877:	vfmadd132pd (%rcx,%rsi,8),%xmm4,%xmm0
+ 87d:	vmovupd %xmm0,0x8(%rdx,%rsi,8)
+ 883:	mov    %r9,%rsi
+ 886:	and    $0xfffffffffffffffe,%rsi
+ 88a:	add    %rsi,%r8
+ 88d:	add    %rsi,%rax
+ 890:	cmp    %rsi,%r9
+ 893:	je     8ad <stencil_f64+0xdd>
+ 895:	vmulsd (%rcx,%r8,8),%xmm2,%xmm2
+ 89b:	vfmadd132sd (%rcx,%rax,8),%xmm2,%xmm1
+ 8a1:	vfmadd231sd -0x8(%rcx,%rax,8),%xmm3,%xmm1
+ 8a8:	vmovsd %xmm1,(%rdx,%rax,8)
+ 8ad:	ret    
+ 8ae:	xchg   %ax,%ax
+ 8b0:	vzeroupper 
+ 8b3:	ret    
+ 8b4:	xor    %esi,%esi
+ 8b6:	mov    $0x1,%eax
+ 8bb:	mov    $0x2,%r8d
+ 8c1:	jmp    851 <stencil_f64+0x81>
+ 8c3:	data16 cs nopw 0x0(%rax,%rax,1)
+ 8ce:	xchg   %ax,%ax
+
+00000000000008d0 <saxpy_stride_f64>:
+ 8d0:	endbr64 
+ 8d4:	mov    %rdi,%r8
+ 8d7:	mov    %rdx,%rdi
+ 8da:	mov    %rcx,%rdx
+ 8dd:	test   %r8,%r8
+ 8e0:	je     979 <saxpy_stride_f64+0xa9>
+ 8e6:	cmp    $0x1,%rsi
+ 8ea:	jne    988 <saxpy_stride_f64+0xb8>
+ 8f0:	lea    -0x1(%r8),%rax
+ 8f4:	cmp    $0x2,%rax
+ 8f8:	jbe    9ad <saxpy_stride_f64+0xdd>
+ 8fe:	mov    %r8,%rcx
+ 901:	vbroadcastsd %xmm0,%ymm2
+ 906:	xor    %eax,%eax
+ 908:	shr    $0x2,%rcx
+ 90c:	shl    $0x5,%rcx
+ 910:	vmovupd (%rdi,%rax,1),%ymm1
+ 915:	vfmadd213pd (%rdx,%rax,1),%ymm2,%ymm1
+ 91b:	vmovupd %ymm1,(%rdx,%rax,1)
+ 920:	add    $0x20,%rax
+ 924:	cmp    %rcx,%rax
+ 927:	jne    910 <saxpy_stride_f64+0x40>
+ 929:	mov    %r8,%rax
+ 92c:	and    $0xfffffffffffffffc,%rax
+ 930:	test   $0x3,%r8b
+ 934:	je     980 <saxpy_stride_f64+0xb0>
+ 936:	vzeroupper 
+ 939:	sub    %rax,%r8
+ 93c:	cmp    $0x1,%r8
+ 940:	je     967 <saxpy_stride_f64+0x97>
+ 942:	lea    (%rdx,%rax,8),%rcx
+ 946:	vmovddup %xmm0,%xmm1
+ 94a:	vmovupd (%rcx),%xmm4
+ 94e:	vfmadd132pd (%rdi,%rax,8),%xmm4,%xmm1
+ 954:	vmovupd %xmm1,(%rcx)
+ 958:	mov    %r8,%rcx
+ 95b:	and    $0xfffffffffffffffe,%rcx
+ 95f:	add    %rcx,%rax
+ 962:	cmp    %rcx,%r8
+ 965:	je     979 <saxpy_stride_f64+0xa9>
+ 967:	lea    (%rdx,%rax,8),%rdx
+ 96b:	vmovsd (%rdx),%xmm3
+ 96f:	vfmadd132sd (%rdi,%rax,8),%xmm3,%xmm0
+ 975:	vmovsd %xmm0,(%rdx)
+ 979:	ret    
+ 97a:	nopw   0x0(%rax,%rax,1)
+ 980:	vzeroupper 
+ 983:	ret    
+ 984:	nopl   0x0(%rax)
+ 988:	shl    $0x3,%rsi
+ 98c:	xor    %eax,%eax
+ 98e:	xor    %ecx,%ecx
+ 990:	vmovsd (%rdi,%rax,1),%xmm1
+ 995:	vfmadd213sd (%rdx,%rax,1),%xmm0,%xmm1
+ 99b:	add    $0x1,%rcx
+ 99f:	vmovsd %xmm1,(%rdx,%rax,1)
+ 9a4:	add    %rsi,%rax
+ 9a7:	cmp    %rcx,%r8
+ 9aa:	jne    990 <saxpy_stride_f64+0xc0>
+ 9ac:	ret    
+ 9ad:	xor    %eax,%eax
+ 9af:	jmp    939 <saxpy_stride_f64+0x69>
+ 9b1:	data16 cs nopw 0x0(%rax,%rax,1)
+ 9bc:	nopl   0x0(%rax)
+
+00000000000009c0 <saxpy_gather_f64>:
+ 9c0:	endbr64 
+ 9c4:	test   %rdi,%rdi
+ 9c7:	je     9ee <saxpy_gather_f64+0x2e>
+ 9c9:	xor    %eax,%eax
+ 9cb:	nopl   0x0(%rax,%rax,1)
+ 9d0:	movslq (%rsi,%rax,4),%r8
+ 9d4:	vmovsd (%rdx,%r8,8),%xmm1
+ 9da:	vfmadd213sd (%rcx,%rax,8),%xmm0,%xmm1
+ 9e0:	vmovsd %xmm1,(%rcx,%rax,8)
+ 9e5:	add    $0x1,%rax
+ 9e9:	cmp    %rax,%rdi
+ 9ec:	jne    9d0 <saxpy_gather_f64+0x10>
+ 9ee:	ret    

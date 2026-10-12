@@ -1,0 +1,9 @@
+kernel,region,AI_flop_per_byte,gflops,bw_bound_gflops,pct_of_bw_roof
+saxpy,L1,0.167,34.91,4.36,800.4
+saxpy,DRAM,0.167,3.03,4.36,69.4
+dot,L1,0.25,15.2,6.54,232.4
+dot,DRAM,0.25,3.69,6.54,56.3
+mul,L1,0.083,19.86,2.18,910.8
+mul,DRAM,0.083,1.1,2.18,50.2
+stencil,L1,0.625,51.17,16.36,312.8
+stencil,DRAM,0.625,11.75,16.36,71.9

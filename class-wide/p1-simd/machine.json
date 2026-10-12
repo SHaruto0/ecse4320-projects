@@ -1,0 +1,9 @@
+{
+  "cpu": "Intel Core i7-1355U (Raptor Lake, P-core), WSL2",
+  "ghz": 3.1,
+  "fma_units": 2,
+  "l1d_kib": 48,
+  "l2_kib": 1280,
+  "l3_kib": 12288,
+  "_ghz_note": "Not fixed in WSL. 3.1 GHz estimated from the latency-bound dot loops: scalar FMA chain 1.29 ns/elem = 4 cycles, in-order vaddss chain 0.636 ns/elem = 2 cycles."
+}
