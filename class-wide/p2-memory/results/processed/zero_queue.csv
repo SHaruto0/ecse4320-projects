@@ -1,0 +1,6 @@
+level,sizes,latency_ns,cycles
+L1d,4 KiB - 22.625 KiB,1.59,4.9
+L2,128 KiB - 512 KiB,4.86,15.1
+L3 (LLC),2.82837 MiB - 5.6568 MiB,22.1,68.5
+DRAM,128 MiB - 1 GiB,196.13,608.0
+"DRAM, 4 KiB pages",1 GiB,269.18,834.5

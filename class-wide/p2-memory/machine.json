@@ -1,0 +1,10 @@
+{
+  "cpu": "Intel Core i7-1355U (Raptor Lake, P-core), WSL2",
+  "ghz": 3.1,
+  "_ghz_note": "Not fixed in WSL2; estimated in Project 1 from latency-bound loops. Cross-check: L1 load-to-use is 5 cycles on Golden Cove.",
+  "l1d_kib": 48,
+  "l2_kib": 1280,
+  "l3_kib": 12288,
+  "dtlb_entries_4k": 96,
+  "stlb_entries": 2048
+}
