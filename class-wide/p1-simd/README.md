@@ -33,7 +33,7 @@ The driver is always built with `-O2 -fno-tree-vectorize`, so only kernel code c
 
 ## Measured on
 
-Intel Core i7-1355U (Raptor Lake), 16 GB, Ubuntu 22.04.5 on WSL2, GCC 11.4. Frequency, turbo and SMT can't be controlled from WSL2 (see REPORT.md section 2).
+Intel Core i7-1355U (Raptor Lake), 32 GB DDR5-5200 (15 GiB visible to WSL2), Ubuntu 22.04.5 on WSL2, GCC 11.4. Frequency, turbo and SMT can't be controlled from WSL2 (see REPORT.md section 2).
 
 ```bash
 pip install pandas matplotlib tabulate
